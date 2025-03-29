@@ -1,0 +1,6 @@
+{
+  "python.analysis.typeCheckingMode": "off",
+  "python.analysis.autoSearchPaths": true,
+  "typescript.suggest.completeFunctionCalls": false,
+  "inlayHint.enable": false,
+}
