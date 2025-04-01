@@ -10,7 +10,6 @@ DOTFILES_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
 echo -e "${BLUE}Setting up your dotfiles...${NC}"
 
-# Create backup directory
 BACKUP_DIR="$HOME/.dotfiles_backup/$(date +%Y%m%d_%H%M%S)"
 mkdir -p "$BACKUP_DIR"
 echo -e "${BLUE}Created backup directory at: $BACKUP_DIR${NC}"
@@ -37,6 +36,7 @@ create_symlink() {
 # Create symlinks
 create_symlink "$DOTFILES_DIR/.tmux.conf" "$HOME/.tmux.conf"
 create_symlink "$DOTFILES_DIR/nvim" "$HOME/.config/nvim"
+create_symlink "$DOTFILES_DIR/.jupyter" "$HOME/.jupyter"
 
 # Install tmux plugin manager if not already installed
 TPM_DIR="$HOME/.tmux/plugins/tpm"
@@ -47,6 +47,4 @@ if [ ! -d "$TPM_DIR" ]; then
 fi
 
 echo -e "${GREEN}Dotfiles setup complete!${NC}"
-echo -e "${BLUE}Run the installation script to install dependencies:${NC}"
-echo -e "${BLUE}  bash $DOTFILES_DIR/scripts/install.sh${NC}"
 echo -e "${BLUE}After installation, start tmux and press prefix + I to install tmux plugins.${NC}"

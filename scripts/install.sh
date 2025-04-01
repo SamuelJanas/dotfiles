@@ -51,36 +51,6 @@ install_debian() {
     fi
 }
 
-# Function to install packages on Fedora/RHEL
-install_fedora() {
-    echo -e "${BLUE}Updating package lists...${NC}"
-    sudo dnf check-update
-    
-    echo -e "${BLUE}Installing dependencies...${NC}"
-    sudo dnf install -y \
-        git \
-        curl \
-        wget \
-        tmux \
-        gcc \
-        gcc-c++ \
-        make \
-        nodejs \
-        npm \
-        python3 \
-        python3-pip \
-        ripgrep \
-        fzf \
-        unzip
-    
-    # Install yarn
-    if ! command_exists yarn; then
-        echo -e "${BLUE}Installing yarn...${NC}"
-        npm install -g yarn
-    fi
-}
-
-# Function to install packages on Arch Linux
 install_arch() {
     echo -e "${BLUE}Updating package lists...${NC}"
     sudo pacman -Syu
@@ -107,7 +77,6 @@ install_arch() {
     fi
 }
 
-# Function to install packages on macOS
 install_macos() {
     # Install Homebrew if not installed
     if ! command_exists brew; then
@@ -132,7 +101,6 @@ install_macos() {
         neovim
 }
 
-# Install JetBrains Mono Nerd Font
 install_nerd_font() {
     echo -e "${BLUE}Installing JetBrains Mono Nerd Font...${NC}"
     
@@ -169,15 +137,11 @@ install_nerd_font() {
     echo -e "${GREEN}JetBrains Mono Nerd Font installed successfully!${NC}"
 }
 
-# Main installation function
 main_install() {
     # Install dependencies based on OS
     case "$OS" in
         "Ubuntu"*|"Debian"*)
             install_debian
-            ;;
-        "Fedora"*|"Red Hat"*)
-            install_fedora
             ;;
         "Arch"*)
             install_arch
@@ -206,8 +170,6 @@ main_install() {
             sudo add-apt-repository ppa:neovim-ppa/unstable -y
             sudo apt update
             sudo apt install -y neovim
-        elif [ "$OS" == "Fedora"* ] || [ "$OS" == "Red Hat"* ]; then
-            sudo dnf install -y neovim
         elif [ "$OS" == "Arch"* ]; then
             sudo pacman -S neovim
         else
