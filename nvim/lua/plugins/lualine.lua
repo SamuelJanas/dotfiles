@@ -4,10 +4,10 @@ return {
 	opts = function()
 		return {
 			options = {
-				theme = bubbles_theme,
+				theme = "gruvbox_dark",
 				component_separators = "|",
 				section_separators = { left = "", right = "" },
-				global_status = True,
+				global_status = true,
 			},
 			sections = {
 				lualine_a = {
