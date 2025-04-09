@@ -1,22 +1,22 @@
 return {
-    "nvim-neo-tree/neo-tree.nvim",
-    branch = "v3.x",
-    dependencies = {
-	"nvim-lua/plenary.nvim",
-	"nvim-tree/nvim-web-devicons",
-	"MunifTanjim/nui.nvim",
-	"s1n7ax/nvim-window-picker",
-    },
-    config = function()
-	require("window-picker").setup({
-		autoselect_one = true,
-		include_current = false,
-		filter_rules = {
-		    bo = {
-			filetype = { "neo-tree", "neo-tree-popup", "notify" },
-			buftype = { "terminal", "quickfix" },
-		    },
+  "nvim-neo-tree/neo-tree.nvim",
+  branch = "v3.x",
+  dependencies = {
+    "nvim-lua/plenary.nvim",
+    "nvim-tree/nvim-web-devicons",
+    "MunifTanjim/nui.nvim",
+    "s1n7ax/nvim-window-picker",
+  },
+  config = function()
+    require("window-picker").setup({
+	    autoselect_one = true,
+	    include_current = false,
+	    filter_rules = {
+		bo = {
+		    filetype = { "neo-tree", "neo-tree-popup", "notify" },
+		    buftype = { "terminal", "quickfix" },
 		},
+	    },
 	})
 
 	require("neo-tree").setup({
