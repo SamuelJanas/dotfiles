@@ -3,8 +3,11 @@ local builtin = require('telescope.builtin')
 
 vim.g.mapleader = " "
 
-map('n', '<Leader>ff', builtin.find_files, {desc = 'Telescope find files'})
-map('n', '<Leader>fg', builtin.live_grep, {desc = 'Telescope live grep'})
+map('n', '<Leader>ff', builtin.find_files, { desc = 'Telescope find files' })
+map('n', '<Leader>fg', builtin.live_grep, { desc = 'Telescope live grep' })
+
+-- exit terminal with C-h
+map('t', '<C-h>', [[<C-\><C-n>]], { noremap = true, silent = true })
 
 -- K for Krack
 map("n", "K", 'i<CR><Esc>', { noremap = true })
@@ -47,9 +50,6 @@ map("n", "gi", "<Plug>(coc-implementation)", { silent = true, desc = "Go to impl
 -- Diagnostics
 map("n", "[d", "<Plug>(coc-diagnostic-prev)", { silent = true, desc = "Previous diagnostic" })
 map("n", "]d", "<Plug>(coc-diagnostic-next)", { silent = true, desc = "Next diagnostic" })
-
--- Format code
-map("n", "<leader>for", ":CocCommand editor.action.formatDocument<CR>", { silent = true, desc = "Format document" })
 
 -- Show available actions (like code actions in VS Code)
 map("n", "<leader>ca", "<Plug>(coc-codeaction)", { silent = true, desc = "Code actions" })
