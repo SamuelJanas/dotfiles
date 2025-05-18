@@ -65,3 +65,7 @@ iron = require('iron.core')
 map('n', '<leader>ip', function() iron.repl_for('python') end, { desc = 'Start IPython REPL' })
 map('n', '<leader>x', function() iron.send_line() end, { desc = 'Send current line to IPython' })
 map('v', '<leader>x', function() iron.visual_send() end, { desc = 'Send visual selection to IPython' })
+
+-- Colorizer
+-- colorizer = require('colorizer')
+map('n', '<leader>sc', ':ColorizerToggle<CR>', {desc = "toggle coloring"})
