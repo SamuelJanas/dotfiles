@@ -7,7 +7,18 @@ return {
   opts = {
     servers = {
       lua_ls = {},
-
+      pyright = {
+        settings = {
+          python = {
+            analysis = {
+              autoSearchPaths = true,
+              diagnosticMode = "openFilesOnly",
+              useLibraryCodeForTypes = true,
+              typeCheckingMode = "off",
+            },
+          },
+        },
+      },
     }
   },
   config = function(_, opts)

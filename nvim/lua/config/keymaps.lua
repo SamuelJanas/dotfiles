@@ -36,11 +36,39 @@ map('n', '<Leader>e', ':Neotree filesystem toggle right<CR>')
 -- remove highlight after search
 map('n', '<Esc>', ':noh<CR>')
 
--- COC.NVIM
 
+-- LSP
 local opts = { silent = true, noremap = true }
+map("n", "gd", vim.lsp.buf.definition, opts)
 map("n", "gH", vim.lsp.buf.hover, opts)
 map("n", "<leader>gr", "<cmd>Telescope lsp_references<CR>", opts)
+map("n", "K", vim.lsp.buf.hover, opts) -- Alternative to gH
+
+map("n", "<leader>rn", vim.lsp.buf.rename, opts)
+
+map("n", "<leader>gi", function()
+  pcall(function() vim.cmd("Telescope lsp_implementations") end)
+end, opts)
+
+map("n", "<leader>gt", function()
+  pcall(function() vim.cmd("Telescope lsp_type_definitions") end)
+end, opts)
+
+map("n", "<leader>gd", function()
+  pcall(function() vim.cmd("Telescope lsp_definitions") end)
+end, opts)
+
+map("n", "<leader>ca", function()
+  pcall(function() vim.cmd("Telescope lsp_code_actions") end)
+end, opts)
+
+map("n", "<leader>ds", function()
+  pcall(function() vim.cmd("Telescope lsp_document_symbols") end)
+end, opts)
+
+map("n", "<leader>ws", function()
+  pcall(function() vim.cmd("Telescope lsp_workspace_symbols") end)
+end, opts)
 
 -- IRON
 iron = require('iron.core')
