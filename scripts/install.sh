@@ -19,12 +19,10 @@ fi
 
 echo -e "${BLUE}Detected OS: $OS${NC}"
 
-# Function to check if a command exists
 command_exists() {
     command -v "$1" >/dev/null 2>&1
 }
 
-# Function to install packages on Ubuntu/Debian
 install_debian() {
     echo -e "${BLUE}Updating package lists...${NC}"
     sudo apt update
@@ -36,19 +34,12 @@ install_debian() {
         wget \
         tmux \
         build-essential \
-        nodejs \
-        npm \
         python3 \
         python3-pip \
         ripgrep \
         fzf \
         unzip
     
-    # Install yarn
-    if ! command_exists yarn; then
-        echo -e "${BLUE}Installing yarn...${NC}"
-        npm install -g yarn
-    fi
 }
 
 install_arch() {
@@ -62,19 +53,12 @@ install_arch() {
         wget \
         tmux \
         base-devel \
-        nodejs \
-        npm \
         python \
         python-pip \
         ripgrep \
         fzf \
         unzip
     
-    # Install yarn
-    if ! command_exists yarn; then
-        echo -e "${BLUE}Installing yarn...${NC}"
-        npm install -g yarn
-    fi
 }
 
 install_macos() {
@@ -93,8 +77,6 @@ install_macos() {
         curl \
         wget \
         tmux \
-        node \
-        yarn \
         python3 \
         ripgrep \
         fzf \
@@ -153,7 +135,6 @@ main_install() {
             echo -e "${RED}Unsupported OS: $OS${NC}"
             echo -e "${YELLOW}Please install the required dependencies manually:${NC}"
             echo "- git, curl, wget, tmux"
-            echo "- Node.js, npm, yarn"
             echo "- Python3, pip"
             echo "- C/C++ compiler (gcc, clang)"
             echo "- ripgrep, fzf"
@@ -177,7 +158,6 @@ main_install() {
         fi
     fi
     
-    # Install JetBrains Mono Nerd Font
     install_nerd_font
     
     echo -e "${GREEN}All dependencies installed successfully!${NC}"
@@ -185,5 +165,4 @@ main_install() {
     echo -e "${BLUE}  bash setup.sh${NC}"
 }
 
-# Run the installation
 main_install
