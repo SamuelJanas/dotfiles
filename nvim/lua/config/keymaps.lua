@@ -42,7 +42,7 @@ local opts = { silent = true, noremap = true }
 map("n", "gd", vim.lsp.buf.definition, opts)
 map("n", "gH", vim.lsp.buf.hover, opts)
 map("n", "<leader>gr", "<cmd>Telescope lsp_references<CR>", opts)
-map("n", "K", vim.lsp.buf.hover, opts) -- Alternative to gH
+-- map("n", "K", vim.lsp.buf.hover, opts) -- Alternative to gH
 
 map("n", "<leader>rn", vim.lsp.buf.rename, opts)
 
