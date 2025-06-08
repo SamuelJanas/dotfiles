@@ -4,7 +4,7 @@ return {
   config = function ()
     local configs = require("nvim-treesitter.configs")
     configs.setup({
-        ensure_installed = {"c", "c_sharp", "lua", "vim", "html", "python", "go", "markdown", "sql", "yaml", "dockerfile"},
+        ensure_installed = {"c", "c_sharp", "lua", "vim", "html", "python", "go", "markdown", "sql", "yaml", "dockerfile", },
         auto_install = true,
         sync_install = false,
         highlight = { enable = true },
