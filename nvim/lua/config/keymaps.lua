@@ -1,75 +1,41 @@
 local map = vim.keymap.set
 local builtin = require('telescope.builtin')
-
 vim.g.mapleader = " "
 
+-- Telescope
 map('n', '<Leader>ff', builtin.find_files, { desc = 'Telescope find files' })
 map('n', '<Leader>fg', builtin.live_grep, { desc = 'Telescope live grep' })
 
+-- Terminal
 -- exit terminal with C-h
 map('t', '<C-h>', [[<C-\><C-n>]], { noremap = true, silent = true })
 
+-- Editing
 -- K for Krack
 map("n", "K", 'i<CR><Esc>', { noremap = true })
 
---surrounding
+-- Surrounding
 map('n', '<Leader>s(', 'bcw()<Esc>P')
 map('n', '<Leader>s)', 'bcw()<Esc>P')
 map('n', '<Leader>s{', 'bcw{}<Esc>P')
 map('n', '<Leader>s}', 'bcw{}<Esc>P')
 map('n', '<Leader>s[', 'bcw[]<Esc>P')
 map('n', '<Leader>s]', 'bcw[]<Esc>P')
-
 map('v', '<Leader>s(', 'c()<Esc>P')
 map('v', '<Leader>s)', 'c()<Esc>P')
 map('v', '<Leader>s{', 'c{}<Esc>P')
 map('v', '<Leader>s}', 'c{}<Esc>P')
 map('v', '<Leader>s[', 'c[]<Esc>P')
 map('v', '<Leader>s]', 'c[]<Esc>P')
-
 map('v', '<leader>s*', 'c****<Esc>hPw')
 map('n', '<leader>s*', 'ciw****<Esc>hPw')
 
--- tree
+-- File tree
 map('n', '<Leader>e', ':Neotree filesystem toggle right<CR>')
 
+-- Search
 -- remove highlight after search
 map('n', '<Esc>', ':noh<CR>')
 
-
--- LSP
-local opts = { silent = true, noremap = true }
-map("n", "gd", vim.lsp.buf.definition, opts)
-map("n", "gH", vim.lsp.buf.hover, opts)
-map("n", "<leader>gr", "<cmd>Telescope lsp_references<CR>", opts)
--- map("n", "K", vim.lsp.buf.hover, opts) -- Alternative to gH
-
-map("n", "<leader>rn", vim.lsp.buf.rename, opts)
-
-map("n", "<leader>gi", function()
-  pcall(function() vim.cmd("Telescope lsp_implementations") end)
-end, opts)
-
-map("n", "<leader>gt", function()
-  pcall(function() vim.cmd("Telescope lsp_type_definitions") end)
-end, opts)
-
-map("n", "<leader>gd", function()
-  pcall(function() vim.cmd("Telescope lsp_definitions") end)
-end, opts)
-
-map("n", "<leader>ca", function()
-  pcall(function() vim.cmd("Telescope lsp_code_actions") end)
-end, opts)
-
-map("n", "<leader>ds", function()
-  pcall(function() vim.cmd("Telescope lsp_document_symbols") end)
-end, opts)
-
-map("n", "<leader>ws", function()
-  pcall(function() vim.cmd("Telescope lsp_workspace_symbols") end)
-end, opts)
-
 -- Colorizer
--- colorizer = require('colorizer')
 map('n', '<leader>sc', ':ColorizerToggle<CR>', {desc = "toggle coloring"})
