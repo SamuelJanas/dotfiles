@@ -1,49 +1,37 @@
 #!/bin/bash
 
-# Colors for output
+# Output colors
 GREEN='\033[0;32m'
 BLUE='\033[0;34m'
 NC='\033[0m'
 
-DOTFILES_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-
-echo -e "${BLUE}Setting up your dotfiles...${NC}"
-
+DOTFILES_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 BACKUP_DIR="$HOME/.dotfiles_backup/$(date +%Y%m%d_%H%M%S)"
-mkdir -p "$BACKUP_DIR"
-echo -e "${BLUE}Created backup directory at: $BACKUP_DIR${NC}"
+TPM_DIR="$HOME/.tmux/plugins/tpm"
 
-# Function to create symlinks
+echo -e "${BLUE}Setting up dotfiles...${NC}"
+mkdir -p "$BACKUP_DIR"
+echo -e "${BLUE}Backup directory: $BACKUP_DIR${NC}"
+
 create_symlink() {
-    local src="$1"
-    local dest="$2"
-    
-    # Backup existing file/directory if it exists
-    if [ -e "$dest" ]; then
-        echo -e "${BLUE}Backing up $dest to $BACKUP_DIR${NC}"
-        mv "$dest" "$BACKUP_DIR/"
-    fi
-    
-    # Create parent directory if it doesn't exist
+    local src="$1" dest="$2"
+    [ -e "$dest" ] && mv "$dest" "$BACKUP_DIR/"
     mkdir -p "$(dirname "$dest")"
-    
-    # Create the symlink
     ln -sf "$src" "$dest"
-    echo -e "${GREEN}Created symlink: $dest -> $src${NC}"
+    echo -e "${GREEN}Linked: $dest -> $src${NC}"
 }
 
-# Create symlinks
-create_symlink "$DOTFILES_DIR/.tmux.conf" "$HOME/.tmux.conf"
-create_symlink "$DOTFILES_DIR/nvim" "$HOME/.config/nvim"
-create_symlink "$DOTFILES_DIR/.jupyter" "$HOME/.jupyter"
+NVIM_SRC="nvim"
+[[ "$1" == "--minimal" ]] && NVIM_SRC="nvim-minimal"
 
-# Install tmux plugin manager if not already installed
-TPM_DIR="$HOME/.tmux/plugins/tpm"
+create_symlink "$DOTFILES_DIR/.tmux.conf" "$HOME/.tmux.conf"
+create_symlink "$DOTFILES_DIR/$NVIM_SRC" "$HOME/.config/nvim"
+
 if [ ! -d "$TPM_DIR" ]; then
-    echo -e "${BLUE}Installing tmux plugin manager...${NC}"
+    echo -e "${BLUE}Installing TPM...${NC}"
     git clone https://github.com/tmux-plugins/tpm "$TPM_DIR"
-    echo -e "${GREEN}Installed tmux plugin manager${NC}"
+    echo -e "${GREEN}TPM installed${NC}"
 fi
 
-echo -e "${GREEN}Dotfiles setup complete!${NC}"
-echo -e "${BLUE}After installation, start tmux and press prefix + I to install tmux plugins.${NC}"
+echo -e "${GREEN}Dotfiles setup complete${NC}"
+echo -e "${BLUE}Start tmux and press prefix + I to install plugins${NC}"
