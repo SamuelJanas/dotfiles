@@ -45,7 +45,7 @@ return {
 		    hide_dotfiles = false,
 		    hide_gitignored = true,
 		},
-		follow_current_file = { enabled=true },
+		follow_current_file = { enabled=false },
 		use_libuv_file_watcher = true,
 		window = {
 		    mappings = {
@@ -61,12 +61,6 @@ return {
 		    end,
 		},
 	    },
-	})
-
-	vim.keymap.set("n", "<leader>e", ":Neotree toggle<CR>", {
-	    noremap = true,
-	    silent = true,
-	    desc = "Toggle NeoTree",
 	})
     end,
 }

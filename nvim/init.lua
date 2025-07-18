@@ -11,4 +11,8 @@ else
   vim.cmd("set shiftwidth=4 smarttab")
   -- vim.cmd("set expandtab")
   -- vim.cmd("set laststatus=3")
+  vim.opt.ignorecase = true
+  vim.opt.smartcase = true
+  vim.opt.swapfile = false
+  vim.opt.autoread = true
 end
