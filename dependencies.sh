@@ -61,15 +61,15 @@ install_yarn() {
 install_minimal() {
     if [[ "$OS" == "macOS" ]]; then
         brew update
-        brew install tmux fzf
+        brew install tmux fzf ripgrep
     elif [[ "$OS" == "Debian" ]]; then
         sudo apt update
-        sudo apt install -y tmux fzf
+        sudo apt install -y tmux fzf ripgrep
     fi
 }
 
 case "$1" in
-    --minimal)
+    --mini)
         install_minimal
         ;;
     --yarn)

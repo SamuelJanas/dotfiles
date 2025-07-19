@@ -22,7 +22,7 @@ create_symlink() {
 }
 
 NVIM_SRC="nvim"
-[[ "$1" == "--minimal" ]] && NVIM_SRC="nvim-minimal"
+[[ "$1" == "--mini" ]] && NVIM_SRC="nvim-mini"
 
 create_symlink "$DOTFILES_DIR/.tmux.conf" "$HOME/.tmux.conf"
 create_symlink "$DOTFILES_DIR/$NVIM_SRC" "$HOME/.config/nvim"
