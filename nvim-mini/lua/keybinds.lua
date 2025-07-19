@@ -81,6 +81,8 @@ keymap("v", ">", ">gv", { desc = "Indent right and reselect" })
 keymap("n", "K", 'i<CR><Esc>', { noremap = true })
 keymap("n", "<C-/>", 'gcc', { noremap = true })
 
+-- Flash.nvim
+vim.keymap.set({"n","x","o"}, "s", function() require("flash").jump() end, {desc = "Flash Jump"})
 
 --LSP
 local opts = { silent = true, noremap = true }

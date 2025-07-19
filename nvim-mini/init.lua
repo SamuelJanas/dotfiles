@@ -1,16 +1,5 @@
 -- Thanks for the config
 -- https://gitlab.com/domsch1988/mvim/-/blob/main/
--- + change to gruvbox for consistency / or don't to discern between configs
--- + adjust keymaps
--- + MASON/lsp
-vim.opt.ignorecase = true
-vim.opt.smartcase = true
-vim.opt.swapfile = false
-vim.opt.autoread = true
-vim.cmd("set number")
-vim.cmd("set relativenumber")
-vim.cmd("set scrolloff=12")
-vim.cmd("set shiftwidth=4 smarttab")
 
 local path_package = vim.fn.stdpath('data') .. '/site'
 local mini_path = path_package .. '/pack/deps/start/mini.nvim'
@@ -61,7 +50,6 @@ now(function()
     vim.opt.complete:append("kspell")
     vim.o.path = vim.o.path .. ",**"
     vim.o.tags = vim.o.tags .. ",/home/dosa/.config/nvim/tags"
-    -- don't save blank buffers to sessions (like neo-tree, trouble etc.)
     vim.opt.sessionoptions:remove('blank')
     vim.cmd([[colorscheme gruvbox]])
 end)
@@ -206,7 +194,7 @@ later(function()
 end)
 later(function() require("mini.doc").setup() end)
 later(function() require("mini.extra").setup() end)
-later(function()
+now(function()
     require("mini.files").setup({
         mappings = {
             close = '<ESC>',
@@ -297,7 +285,6 @@ later(function()
     -- only mean to press `<Esc>` inside terminal.
     local mode = { 'i', 'c', 'x', 's' }
     map_combo(mode, 'jk', '<BS><BS><Esc>')
-
     -- To not have to worry about the order of keys, also map "kj"
     map_combo(mode, 'kj', '<BS><BS><Esc>')
 
@@ -454,6 +441,11 @@ later(function()
 end)
 
 now(function() require('mason').setup() end)
+
+add({
+    source="folke/flash.nvim",
+})
+later(function() require('flash').setup() end)
 
 -- imports
 require("highlights")
