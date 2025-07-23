@@ -23,8 +23,6 @@ keymap("n", "<leader>e", function()
     end
 end,
 { desc = 'File explorer' })
-keymap("n", "<leader><space>", function() require('mini.pick').builtin.buffers() end,
-{ desc = 'Find Buffer' })
 keymap("n", "<leader>fg", function() require('mini.pick').builtin.grep_live() end,
 { desc = 'Find String' })
 keymap("n", "<leader>fh", function() require('mini.pick').builtin.help() end,
@@ -68,18 +66,17 @@ keymap("n", "<leader>rw", function()
     keymap("n", "<leader>n", "<cmd>noh<cr>", { desc = 'Clear Search Highlight' })
 
 
-keymap("n", "<A-j>", ":m .+1<CR>==", { desc = "Move line down" })
-keymap("n", "<A-k>", ":m .-2<CR>==", { desc = "Move line up" })
-keymap("v", "<A-j>", ":m '>+1<CR>gv=gv", { desc = "Move selection down" })
-keymap("v", "<A-k>", ":m '<-2<CR>gv=gv", { desc = "Move selection up" })
-
 -- Better indenting in visual mode
 keymap("v", "<", "<gv", { desc = "Indent left and reselect" })
 keymap("v", ">", ">gv", { desc = "Indent right and reselect" })
 
 -- Krack
 keymap("n", "K", 'i<CR><Esc>', { noremap = true })
-keymap("n", "<C-/>", 'gcc', { noremap = true })
+vim.keymap.set('n', '<C-/>', 'gcc', { noremap = false, silent = true })
+vim.keymap.set('v', '<C-/>', 'gc',  { noremap = false, silent = true })
+
+vim.keymap.set('n', '<C-_>', 'gcc', { remap = true, desc = "Toggle line comment" })
+vim.keymap.set('v', '<C-_>', 'gc', { remap = true, desc = "Toggle line comment" })
 
 -- Flash.nvim
 vim.keymap.set({"n","x","o"}, "s", function() require("flash").jump() end, {desc = "Flash Jump"})

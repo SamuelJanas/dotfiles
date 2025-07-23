@@ -417,7 +417,6 @@ add({
 add({
     source = 'neovim/nvim-lspconfig',
 })
-
 later(function()
   local lspconfig = require('lspconfig')
   local servers = {
@@ -439,9 +438,9 @@ later(function()
     lspconfig[server].setup(config)
   end
 end)
-
 now(function() require('mason').setup() end)
 
+-- Flash nvim for s mode
 add({
     source="folke/flash.nvim",
 })
