@@ -1,28 +1,40 @@
 local keymap = vim.keymap.set
 
-local split_sensibly = function()
-    if vim.api.nvim_win_get_width(0) > math.floor(vim.api.nvim_win_get_height(0) * 2.3) then
-        vim.cmd("vs")
-    else
-        vim.cmd("split")
-    end
-end
-
-keymap("n", "<leader>q", "<cmd>wq<cr>", { desc = 'Quit' })
+-- less disorienting navigation
+keymap("n", "<C-d>", "<C-d>zz")
+keymap("n", "<C-u>", "<C-u>zz")
+-- same can be done with {, }
 
 keymap("n", "<leader>ff", function() require('mini.pick').builtin.files() end,
 { desc = 'Find File' })
 keymap("n", "<leader>fr", function() require('mini.pick').builtin.resume() end,
 { desc = 'Find File' })
+
+-- Open mini files (or close if already open)
 keymap("n", "<leader>e", function()
-    local buffer_name = vim.api.nvim_buf_get_name(0)
-    if buffer_name == "" or string.match(buffer_name, "Starter") then
-        require('mini.files').open(vim.loop.cwd())
-    else
-        require('mini.files').open(vim.api.nvim_buf_get_name(0))
+    local MiniFiles = require("mini.files")
+
+    -- Check if mini.files is already open
+    local is_open = false
+    for _, win in pairs(vim.api.nvim_list_wins()) do
+        local buf = vim.api.nvim_win_get_buf(win)
+        if vim.bo[buf].filetype == "minifiles" then
+            is_open = true
+            break
+        end
     end
-end,
-{ desc = 'File explorer' })
+
+    if is_open then
+        MiniFiles.close()
+    else
+        local buffer_name = vim.api.nvim_buf_get_name(0)
+        if buffer_name == "" or string.match(buffer_name, "Starter") then
+            MiniFiles.open(vim.loop.cwd())
+        else
+            MiniFiles.open(buffer_name)
+        end
+    end
+end, { desc = "Toggle MiniFiles" })
 keymap("n", "<leader>fg", function() require('mini.pick').builtin.grep_live() end,
 { desc = 'Find String' })
 keymap("n", "<leader>fh", function() require('mini.pick').builtin.help() end,
@@ -32,39 +44,6 @@ keymap("n", "<leader>fh", function() require('mini.pick').builtin.help() end,
 keymap("n", "YY", "<cmd>%y<cr>", { desc = 'Yank Buffer' })
 keymap("n", "<Esc>", "<cmd>noh<cr>", { desc = 'Clear Search' })
 
--- Replace
-keymap("n", "<leader>re", function() vim.api.nvim_feedkeys(":%s/", "n", false) end , { desc = 'Start Replace' })
-keymap("n", "<leader>rs", '<cmd>%s/\\n/\r/g<cr>', { desc = 'Replace \n with Newline' })
-keymap("n", "<leader>rw", function()
-    local word = vim.fn.expand("<cword>")
-    local cmd = ":%s/" .. word .. "/"
-    vim.api.nvim_feedkeys(cmd, "n", false) end , { desc = 'Start Replace' })
-
-    -- ╔══════════════════════╗
-    -- ║    Buffer Keymaps    ║
-    -- ╚══════════════════════╝
-    keymap("n", "<leader>bd", "<cmd>bd<cr>", { desc = 'Close Buffer' })
-    keymap("n", "<leader>bq", "<cmd>%bd|e#<cr>", { desc = 'Close other Buffers' })
-    keymap("n", "<S-l>", "<cmd>bnext<cr>", { desc = 'Next Buffer' })
-    keymap("n", "<S-h>", "<cmd>bprevious<cr>", { desc = 'Previous Buffer' })
-    keymap("n", "<TAB>", "<C-^>", { desc = "Alternate buffers" })
-    -- Format Buffer
-    -- With and without LSP
-    if vim.tbl_isempty(vim.lsp.get_clients()) then
-        keymap("n", "<leader>bf", function() vim.lsp.buf.format() end,
-        { desc = 'Format Buffer' })
-    else
-        keymap("n", "<leader>bf", "gg=G<C-o>", { desc = 'Format Buffer' })
-    end
-
-    keymap("n", "<leader>gl", function()
-        split_sensibly()
-        vim.cmd('terminal lazygit')
-    end, { desc = 'Lazygit' })
-
-    keymap("n", "<leader>wq", "<cmd>wincmd q<cr>", { desc = 'Close Window' })
-    keymap("n", "<leader>n", "<cmd>noh<cr>", { desc = 'Clear Search Highlight' })
-
 
 -- Better indenting in visual mode
 keymap("v", "<", "<gv", { desc = "Indent left and reselect" })
@@ -72,16 +51,31 @@ keymap("v", ">", ">gv", { desc = "Indent right and reselect" })
 
 -- Krack
 keymap("n", "K", 'i<CR><Esc>', { noremap = true })
-vim.keymap.set('n', '<C-/>', 'gcc', { noremap = false, silent = true })
-vim.keymap.set('v', '<C-/>', 'gc',  { noremap = false, silent = true })
 
-vim.keymap.set('n', '<C-_>', 'gcc', { remap = true, desc = "Toggle line comment" })
-vim.keymap.set('v', '<C-_>', 'gc', { remap = true, desc = "Toggle line comment" })
+-- Comment out
+keymap('n', '<C-/>', 'gcc', { noremap = false, silent = true })
+keymap('v', '<C-/>', 'gc',  { noremap = false, silent = true })
+
+keymap('n', '<C-_>', 'gcc', { remap = true, desc = "Toggle line comment" })
+keymap('v', '<C-_>', 'gc', { remap = true, desc = "Toggle line comment" })
 
 -- Flash.nvim
-vim.keymap.set({"n","x","o"}, "s", function() require("flash").jump() end, {desc = "Flash Jump"})
+keymap({"n","x","o"}, "s", function() require("flash").jump() end, {desc = "Flash Jump"})
 
---LSP
+-- Smart Splits
+local ss = require('smart-splits')
+keymap("n", "<C-h>", ss.move_cursor_left)
+keymap("n", "<C-j>", ss.move_cursor_down)
+keymap("n", "<C-k>", ss.move_cursor_up)
+keymap("n", "<C-l>", ss.move_cursor_right)
+
+keymap("n", "<M-h>", ss.resize_left)
+keymap("n", "<M-l>", ss.resize_right)
+keymap("n", "<M-k>", ss.resize_up)
+keymap("n", "<M-j>", ss.resize_down)
+
+-- LSP
+
 local opts = { silent = true, noremap = true }
 
 -- Navigation
@@ -106,3 +100,6 @@ keymap("n", "<leader>dd", vim.diagnostic.open_float, opts)
 keymap("n", "<leader>dp", vim.diagnostic.goto_prev, opts)
 keymap("n", "<leader>dn", vim.diagnostic.goto_next, opts)
 keymap("n", "<leader>dl", vim.diagnostic.setloclist, opts)
+
+keymap('i', '<PageUp>', '<Nop>', { silent = true })
+keymap('i', '<PageDown>', '<Nop>', { silent = true })

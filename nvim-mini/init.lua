@@ -1,4 +1,4 @@
--- Thanks for the config
+-- Thanks for the base config
 -- https://gitlab.com/domsch1988/mvim/-/blob/main/
 
 local path_package = vim.fn.stdpath('data') .. '/site'
@@ -45,11 +45,10 @@ now(function()
     vim.o.clipboard = "unnamed,unnamedplus"
     vim.o.updatetime = 1000
     vim.opt.iskeyword:append("-")
-    vim.o.spelllang = "de,en"
+    vim.o.spelllang = "en,pl"
     vim.o.spelloptions = "camel"
     vim.opt.complete:append("kspell")
     vim.o.path = vim.o.path .. ",**"
-    vim.o.tags = vim.o.tags .. ",/home/dosa/.config/nvim/tags"
     vim.opt.sessionoptions:remove('blank')
     vim.cmd([[colorscheme gruvbox]])
 end)
@@ -91,113 +90,61 @@ later(function()
     })
 end)
 
-later(function()
-    require("mini.basics").setup({
-        options = {
-            basic = true,
-            extra_ui = true,
-            win_borders = "bold",
-        },
-        mappings = {
-            basic = true,
-            windows = true,
-        },
-        autocommands = {
-            basic = true,
-            relnum_in_visual_mode = true,
-        },
-    })
-end)
 later(function() require("mini.bracketed").setup() end)
 later(function() require("mini.bufremove").setup() end)
--- Disable this after some getting used to this setup
-later(function()
-    require("mini.clue").setup({
-        triggers = {
-            -- Leader triggers
-            { mode = "n", keys = "<Leader>" },
-            { mode = "x", keys = "<Leader>" },
-
-            { mode = "n", keys = "\\" },
-
-            -- Built-in completion
-            { mode = "i", keys = "<C-x>" },
-
-            -- `g` key
-            { mode = "n", keys = "g" },
-            { mode = "x", keys = "g" },
-
-            -- Surround
-            { mode = "n", keys = "s" },
-
-            -- Marks
-            { mode = "n", keys = "'" },
-            { mode = "n", keys = "`" },
-            { mode = "x", keys = "'" },
-            { mode = "x", keys = "`" },
-
-            -- Registers
-            { mode = "n", keys = '"' },
-            { mode = "x", keys = '"' },
-            { mode = "i", keys = "<C-r>" },
-            { mode = "c", keys = "<C-r>" },
-
-            -- Window commands
-            { mode = "n", keys = "<C-w>" },
-
-            -- `z` key
-            { mode = "n", keys = "z" },
-            { mode = "x", keys = "z" },
-        },
-
-        clues = {
-            { mode = "n", keys = "<Leader>b", desc = " Buffer" },
-            { mode = "n", keys = "<Leader>f", desc = " Find" },
-            { mode = "n", keys = "<Leader>g", desc = "󰊢 Git" },
-            { mode = "n", keys = "<Leader>i", desc = "󰏪 Insert" },
-            { mode = "n", keys = "<Leader>l", desc = "󰘦 LSP" },
-            { mode = "n", keys = "<Leader>m", desc = " Mini" },
-            { mode = "n", keys = "<Leader>q", desc = " NVim" },
-            { mode = "n", keys = "<Leader>s", desc = "󰆓 Session" },
-            { mode = "n", keys = "<Leader>s", desc = " Terminal" },
-            { mode = "n", keys = "<Leader>u", desc = "󰔃 UI" },
-            { mode = "n", keys = "<Leader>w", desc = " Window" },
-            require("mini.clue").gen_clues.g(),
-            require("mini.clue").gen_clues.builtin_completion(),
-            require("mini.clue").gen_clues.marks(),
-            require("mini.clue").gen_clues.registers(),
-            require("mini.clue").gen_clues.windows(),
-            require("mini.clue").gen_clues.z(),
-        },
-        window = {
-            delay = 300,
-        },
-    })
-end)
-later(function() require('mini.colors').setup() end)
 later(function() require("mini.comment").setup() end)
 later(function()
     require("mini.completion").setup({
-        mappings = {
-            go_in = "<RET>",
-        },
-        window = {
-            info = { border = "solid" },
-            signature = { border = "solid" },
-        },
-    })
+      delay = { completion = 50, info = 50, signature = 25 },
+
+      lsp_completion = {
+        source_func = 'completefunc',
+        auto_setup = true,
+        -- processing priority
+        process_items = function(items, base)
+          table.sort(items, function(a, b)
+            local a_exact = vim.startswith(a.label or "", base)
+            local b_exact = vim.startswith(b.label or "", base)
+            if a_exact and not b_exact then return true end
+            if b_exact and not a_exact then return false end
+            local kind_priority = {
+              [2] = 1,   -- Method
+              [3] = 2,   -- Function
+              [5] = 3,   -- Field/Property
+              [6] = 4,   -- Variable
+              [7] = 5,   -- Class
+              [9] = 6,   -- Module
+              [10] = 7,  -- Property
+              [14] = 8,  -- Keyword
+            }
+            local a_priority = kind_priority[a.kind] or 99
+            local b_priority = kind_priority[b.kind] or 99
+            if a_priority ~= b_priority then
+              return a_priority < b_priority
+            end
+          end)
+          return items
+        end,
+      },
+
+      -- VSCode-like mappings
+      mappings = {
+        force_twostep = '<C-Space>',
+        scroll_down = '<PageDown>',
+        scroll_up = '<PageUp>',
+      },
+ })
 end)
 later(function()
     require("mini.cursorword").setup()
     vim.api.nvim_set_hl(0, "MiniCursorword", { underline = true })
-    vim.api.nvim_set_hl(0, "MiniCursorwordCurrent", { underline = false, bg = NONE })
 end)
 later(function() require("mini.doc").setup() end)
 later(function() require("mini.extra").setup() end)
 now(function()
     require("mini.files").setup({
         mappings = {
-            close = '<ESC>',
+            close = '<Esc>',
         },
         windows = {
             preview = true,
@@ -207,38 +154,10 @@ now(function()
     })
 end)
 later(function() require("mini.fuzzy").setup() end)
--- This is for display purposes, adjust accordingly 
+
+-- This is for display purposes
 later(function()
     local hipatterns = require("mini.hipatterns")
-
-    local censor_extmark_opts = function(_, match, _)
-        local mask = string.rep("*", vim.fn.strchars(match))
-        return {
-            virt_text = { { mask, "Comment" } },
-            virt_text_pos = "overlay",
-            priority = 200,
-            right_gravity = false,
-        }
-    end
-
-    -- This is a custom "hide my password" solution
-    -- Add patterns to match below
-    -- toggle with <leader>up
-    local password_table = {
-        pattern = {
-            "password: ()%S+()",
-            "password_usr: ()%S+()",
-            "_pw: ()%S+()",
-            "password_asgard_read: ()%S+()",
-            "password_elara_admin: ()%S+()",
-            "gpg_pass: ()%S+()",
-            "passwd: ()%S+()",
-            "secret: ()%S+()",
-        },
-        group = "",
-        extmark_opts = censor_extmark_opts,
-    }
-
     hipatterns.setup({
         highlighters = {
             -- Highlight standalone 'FIXME', 'HACK', 'TODO', 'NOTE'
@@ -247,22 +166,10 @@ later(function()
             todo = { pattern = "%f[%w]()TODO()%f[%W]", group = "MiniHipatternsTodo" },
             note = { pattern = "%f[%w]()NOTE()%f[%W]", group = "MiniHipatternsNote" },
 
-            -- Cloaking Passwords
-            pw = password_table,
-
             -- Highlight hex color strings (`#rrggbb`) using that color
             hex_color = hipatterns.gen_highlighter.hex_color(),
         },
     })
-
-    vim.keymap.set("n", "<leader>up", function()
-        if next(hipatterns.config.highlighters.pw) == nil then
-            hipatterns.config.highlighters.pw = password_table
-        else
-            hipatterns.config.highlighters.pw = {}
-        end
-        vim.cmd("edit")
-    end, { desc = "Toggle Password Cloaking" })
 end)
 
 
@@ -285,7 +192,6 @@ later(function()
     -- only mean to press `<Esc>` inside terminal.
     local mode = { 'i', 'c', 'x', 's' }
     map_combo(mode, 'jk', '<BS><BS><Esc>')
-    -- To not have to worry about the order of keys, also map "kj"
     map_combo(mode, 'kj', '<BS><BS><Esc>')
 
     local map_multistep = require('mini.keymap').map_multistep
@@ -320,7 +226,6 @@ end)
 later(function()
     -- We took this from echasnovski's personal configuration
     -- https://github.com/echasnovski/nvim/blob/master/init.lua
-
     local filterout_lua_diagnosing = function(notif_arr)
         local not_diagnosing = function(notif)
             return not vim.startswith(notif.msg, "lua_ls: Diagnosing")
@@ -365,88 +270,19 @@ later(function()
     vim.ui.select = MiniPick.ui_select
 end)
 
-later(function() require("mini.splitjoin").setup() end)
+-- Does what you see with gS :-)
+later(function() require(
+    "mini.splitjoin"
+).setup() end)
 
-now(function()
-    Mvim_starter_custom = function()
-        return {
-            { name = "Recent Files", action = function() require("mini.extra").pickers.oldfiles() end, section = "Search" },
-            { name = "Session",      action = function() require("mini.sessions").select() end,        section = "Search" },
-        }
-    end
-end)
-later(function()
-    require("mini.statusline").setup({
-        content = {
-            active = function()
-                local mode, mode_hl = MiniStatusline.section_mode({ trunc_width = 120 })
-                local git           = MiniStatusline.section_git({ trunc_width = 40 })
-                local filename      = MiniStatusline.section_filename({ trunc_width = 140 })
-                local fileinfo      = MiniStatusline.section_fileinfo({ trunc_width = 120 })
-                local search        = MiniStatusline.section_searchcount({ trunc_width = 75 })
-
-                return MiniStatusline.combine_groups({
-                    { hl = mode_hl,                 strings = { mode } },
-                    { hl = 'MiniStatuslineDevinfo', strings = { git, diff, diagnostics, lsp } }, '%<', -- Mark general truncate point
-                    { hl = 'MiniStatuslineFilename', strings = { filename } },
-                    '%=', -- End left alignment
-                    { hl = 'MiniStatuslineFileinfo', strings = { fileinfo } },
-                    { hl = mode_hl,                  strings = { search, location } },
-                })
-            end,
-            inactive = nil,
-        },
-    })
-end)
--- later(function() require("mini.surround").setup() end)
+later(function() require("mini.surround").setup() end)
 later(function() require("mini.tabline").setup() end)
 later(function() require("mini.trailspace").setup() end)
 later(function() require("mini.visits").setup() end)
 
--- LSP
-add({
-  source = 'williamboman/mason.nvim',
-  depends = { 'nvim-lua/plenary.nvim' }, -- required dependency
-  hooks = {
-    post_checkout = function()
-      require('mason').setup()
-    end,
-  },
-})
-
-add({
-    source = 'neovim/nvim-lspconfig',
-})
-later(function()
-  local lspconfig = require('lspconfig')
-  local servers = {
-    lua_ls = {},
-    pyright = {
-      settings = {
-        python = {
-          analysis = {
-            autoSearchPaths = true,
-            diagnosticMode = "openFilesOnly",
-            useLibraryCodeForTypes = true,
-            typeCheckingMode = "off",
-          },
-        },
-      },
-    },
-  }
-  for server, config in pairs(servers) do
-    lspconfig[server].setup(config)
-  end
-end)
-now(function() require('mason').setup() end)
-
--- Flash nvim for s mode
-add({
-    source="folke/flash.nvim",
-})
-later(function() require('flash').setup() end)
-
 -- imports
+require("lsp")
+require("other_plugins")
 require("highlights")
 require("keybinds")
 

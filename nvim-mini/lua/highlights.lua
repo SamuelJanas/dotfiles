@@ -1,5 +1,4 @@
 -- Overwrite some Highlight Groups to add Italic Fonts
-
 local function mod_hl(hl_name, opts)
     local is_ok, hl_def = pcall(vim.api.nvim_get_hl, 0, { name = hl_name, link = true })
     if is_ok then
