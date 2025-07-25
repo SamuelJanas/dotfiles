@@ -42,7 +42,6 @@ now(function()
     vim.o.tabstop = 4
     vim.o.expandtab = true
     vim.o.scrolloff = 10
-    vim.o.clipboard = "unnamed,unnamedplus"
     vim.o.updatetime = 1000
     vim.opt.iskeyword:append("-")
     vim.o.spelllang = "en,pl"
@@ -259,6 +258,8 @@ later(function()
     require("mini.pick").setup({
         mappings = {
             choose_in_vsplit = "<C-CR>",
+            move_down = '<C-j>',
+            move_up = '<C-k>',
         },
         options = {
             use_cache = true,

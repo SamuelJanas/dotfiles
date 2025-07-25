@@ -26,6 +26,15 @@ NVIM_SRC="nvim"
 
 create_symlink "$DOTFILES_DIR/.tmux.conf" "$HOME/.tmux.conf"
 create_symlink "$DOTFILES_DIR/$NVIM_SRC" "$HOME/.config/nvim"
+create_symlink "$DOTFILES_DIR/vimrc" "$HOME/.vimrc"
+
+PLUG_VIM="$HOME/.vim/autoload/plug.vim"
+if [ ! -f "$PLUG_VIM" ]; then
+        echo -e "${BLUE}Installing vim-plug...${NC}"
+            curl -fLo "$PLUG_VIM" --create-dirs \
+                        https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+                echo -e "${GREEN}vim-plug installed${NC}"
+fi
 
 if [ ! -d "$TPM_DIR" ]; then
     echo -e "${BLUE}Installing TPM...${NC}"

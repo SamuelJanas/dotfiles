@@ -4,11 +4,17 @@ local keymap = vim.keymap.set
 keymap("n", "<C-d>", "<C-d>zz")
 keymap("n", "<C-u>", "<C-u>zz")
 -- same can be done with {, }
-
+--
 keymap("n", "<leader>ff", function() require('mini.pick').builtin.files() end,
 { desc = 'Find File' })
 keymap("n", "<leader>fr", function() require('mini.pick').builtin.resume() end,
 { desc = 'Find File' })
+
+
+keymap("n", "<S-l>", "<cmd>bnext<cr>", { desc = 'Next Buffer' })
+keymap("n", "<S-h>", "<cmd>bprevious<cr>", { desc = 'Previous Buffer' })
+keymap("n", "<leader>t", "<cmd>enew<cr>", { desc = 'New Buffer' })
+keymap("n", "<leader>q", "<cmd>bdelete<cr>", { desc = 'Close Buffer' })
 
 -- Open mini files (or close if already open)
 keymap("n", "<leader>e", function()
