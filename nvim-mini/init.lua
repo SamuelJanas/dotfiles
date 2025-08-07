@@ -278,7 +278,7 @@ later(function() require(
 
 later(function() require("mini.surround").setup() end)
 later(function() require("mini.tabline").setup() end)
-later(function() require("mini.trailspace").setup() end)
+-- later(function() require("mini.trailspace").setup() end)
 later(function() require("mini.visits").setup() end)
 
 -- imports

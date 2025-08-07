@@ -58,6 +58,9 @@ keymap("v", ">", ">gv", { desc = "Indent right and reselect" })
 -- Krack
 keymap("n", "K", 'i<CR><Esc>', { noremap = true })
 
+-- Delete a buffer
+keymap("n", "<leader>bd", ":bd<CR>", { noremap = true})
+
 -- Comment out
 keymap('n', '<C-/>', 'gcc', { noremap = false, silent = true })
 keymap('v', '<C-/>', 'gc',  { noremap = false, silent = true })

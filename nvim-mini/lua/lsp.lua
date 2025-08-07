@@ -1,9 +1,9 @@
 local add, now, later = MiniDeps.add, MiniDeps.now, MiniDeps.later
 
--- LSP
+-- Mason + LSPConfig
 add({
   source = 'williamboman/mason.nvim',
-  depends = { 'nvim-lua/plenary.nvim' }, -- required dependency
+  depends = { 'nvim-lua/plenary.nvim' },
   hooks = {
     post_checkout = function()
       require('mason').setup()
@@ -12,10 +12,17 @@ add({
 })
 
 add({
-    source = 'neovim/nvim-lspconfig',
+  source = 'williamboman/mason-lspconfig.nvim',
+  depends = { 'williamboman/mason.nvim', 'neovim/nvim-lspconfig' },
 })
+
+add({
+  source = 'neovim/nvim-lspconfig',
+})
+
 later(function()
-  local lspconfig = require('lspconfig')
+  local mason_lspconfig = require('mason-lspconfig')
+
   local servers = {
     lua_ls = {},
     pyright = {
@@ -30,10 +37,14 @@ later(function()
         },
       },
     },
+    omnisharp = {},
   }
-  for server, config in pairs(servers) do
-    lspconfig[server].setup(config)
-  end
+
+  require('mason').setup()
+
+  mason_lspconfig.setup({
+    ensure_installed = vim.tbl_keys(servers),
+    automatic_installation = true,
+  })
 end)
-now(function() require('mason').setup() end)
 
