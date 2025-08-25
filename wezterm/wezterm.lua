@@ -1,6 +1,66 @@
 local wezterm = require 'wezterm'
 local config = {}
 
+
+config.color_scheme = 'Gruvbox Dark (Gogh)'
+config.default_prog = { 'pwsh.exe' }
+config.font = wezterm.font 'JetBrainsMono Nerd Font'
+config.max_fps = 144
+config.tab_bar_at_bottom = true
+config.use_fancy_tab_bar = true
+config.tab_max_width = 32
+config.tab_and_split_indices_are_zero_based = true
+config.colors = {
+  tab_bar = {
+    active_tab = {
+      fg_color = '#bcd1c2',
+      bg_color = '#36593f'
+      }
+    }
+}
+config.window_padding = {
+    left = 0,
+    right = 0,
+    top = 0,
+    bottom = 0,
+}
+config.inactive_pane_hsb = {
+  saturation = 0.8,
+  brightness = 0.55,
+}
+config.leader = { key = 'a', mods = 'CTRL', timeout_milliseconds = 2000 }
+
+local function find_or_create_lazygit_tab(window, pane)
+  local tabs = window:mux_window():tabs()
+  local current_tab = window:active_tab()
+  local current_tab_title = current_tab:get_title()
+  
+  if string.lower(current_tab_title):find("lazygit") then
+    window:perform_action(wezterm.action.ActivateLastTab, pane)
+    return
+  end
+  
+  for _, tab in ipairs(tabs) do
+    local tab_title = tab:get_title()
+    if string.lower(tab_title):find("lazygit") then
+      tab:activate()
+      return
+    end
+  end
+
+  local new_tab = window:perform_action(
+    wezterm.action.SpawnCommandInNewTab {
+      args = { 'lazygit' },
+    },
+    pane,
+    window:active_tab():set_title('lazygit')
+  )
+
+  if new_tab then
+    new_tab:set_title("lazygit")
+  end
+end
+
 local function is_vim(pane)
     return pane:get_user_vars().IS_NVIM == 'true'
 end
@@ -38,69 +98,6 @@ local function split_nav(resize_or_move, key)
     end),
   }
 end
-
-config.color_scheme = 'Gruvbox Dark (Gogh)'
-config.default_prog = { 'pwsh.exe' }
-config.font = wezterm.font 'JetBrainsMono Nerd Font'
-config.max_fps = 144
-config.tab_bar_at_bottom = true
-config.use_fancy_tab_bar = true
-config.tab_max_width = 32
-config.tab_and_split_indices_are_zero_based = true
-config.colors = {
-  tab_bar = {
-    active_tab = {
-      fg_color = '#bcd1c2',
-      bg_color = '#36593f'
-      }
-    }
-}
-config.window_padding = {
-    left = 0,
-    right = 0,
-    top = 0,
-    bottom = 0,
-}
-config.inactive_pane_hsb = {
-  saturation = 0.8,
-  brightness = 0.55,
-}
-config.leader = { key = 'a', mods = 'CTRL', timeout_milliseconds = 2000 }
-
-wezterm.on("lazygit_signal", function(window, pane)
-  local cwd = pane:get_current_working_dir() or ""
-  -- normalize URL-like cwd returned by wezterm
-  cwd = cwd:gsub("^file://", ""):gsub("%%20", " ")
-
-  -- check for .git directory
-  local git_dir = cwd .. "/.git"
-  local git_exists = wezterm.run_child_process({"test", "-d", git_dir}) == 0
-
-  local mux = wezterm.mux
-  local target_tab = nil
-
-  -- check if a tab with lazygit already exists
-  for _, tab in ipairs(mux.get_tabs(window)) do
-    local tab_title = tab:get_title() or ""
-    if tab_title:match("lazygit") then
-      target_tab = tab
-      break
-    end
-  end
-
-  if target_tab then
-    window:active_tab_index(target_tab.tab_index)
-  else
-    -- open a new tab running lazygit
-    window:perform_action(
-      wezterm.action.SpawnCommandInNewTab{
-        args = {"lazygit"},
-        cwd = cwd
-      },
-      pane
-    )
-  end
-end)
 
 config.keys = {
   {
@@ -178,6 +175,11 @@ config.keys = {
     key = 'z',
     mods = 'LEADER',
     action = wezterm.action.TogglePaneZoomState,
+  },
+  {
+    key = 'g',
+    mods = 'LEADER',
+    action = wezterm.action_callback(find_or_create_lazygit_tab),
   },
   split_nav('move', 'h'),
   split_nav('move', 'j'),
