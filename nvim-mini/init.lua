@@ -26,6 +26,7 @@ add({
 -- Neovim Options
 now(function()
     vim.o.background="dark"
+    vim.o.cmdheight=0
     vim.g.mapleader = " "
     vim.o.number = true
     vim.o.relativenumber = true
