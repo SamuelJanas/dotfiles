@@ -18,6 +18,9 @@ config.colors = {
       }
     }
 }
+config.initial_cols = 200
+config.initial_rows = 55
+config.window_background_opacity = 0.95
 config.window_padding = {
     left = 0,
     right = 0,
@@ -76,6 +79,10 @@ local direction_keys = {
     k = 'Up',
     l = 'Right',
 }
+
+-- === PLUGINS === 
+local sessions = wezterm.plugin.require("https://github.com/abidibo/wezterm-sessions")
+ sessions.apply_to_config(config)
 
 
 local function split_nav(resize_or_move, key)
@@ -157,8 +164,8 @@ config.keys = {
       action = wezterm.action_callback(
         function(window, pane, line)
           if line then
-            mux.rename_workspace(
-              window:mux_window():get_workspace(),
+            wezterm.mux.rename_workspace(
+              wezterm.mux.get_active_workspace(),  
               line
             )
           end
@@ -198,6 +205,31 @@ config.keys = {
     mods = "LEADER",
     key = "Backspace",
     action = wezterm.action.RotatePanes "CounterClockwise"
+  },
+  {
+    key = 'S',
+    mods = 'LEADER',
+    action = wezterm.action({ EmitEvent = "save_session" }),
+  },
+  {
+    key = 'l',
+    mods = 'LEADER',
+    action = wezterm.action({ EmitEvent = "load_session" }),
+  },
+  {
+    key = 'r',
+    mods = 'LEADER',
+    action = wezterm.action({ EmitEvent = "restore_session" }),
+  },
+  {
+    key = 'd',
+    mods = 'CTRL|SHIFT',
+    action = wezterm.action({ EmitEvent = "delete_session" }),
+  },
+  {
+    key = 'e',
+    mods = 'CTRL|SHIFT',
+    action = wezterm.action({ EmitEvent = "edit_session" }),
   },
 }
 
