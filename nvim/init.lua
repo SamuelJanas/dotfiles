@@ -53,76 +53,11 @@ now(function()
     vim.cmd([[colorscheme gruvbox]])
 end)
 
--- -- Neovide Configuration
--- now(function()
---     if vim.g.neovide then
---         vim.g.neovide_scroll_animation_length = 0.1
---         vim.opt.mousescroll = "ver:10,hor:6"
---         vim.g.neovide_theme = "light"
---
---         vim.g.neovide_floating_shadow = true
---         vim.g.neovide_floating_z_height = 2
---         vim.g.neovide_light_angle_degrees = 45
---         vim.g.neovide_light_radius = 15
---
---         vim.g.neovide_floating_blur_amount_x = 10.0
---         vim.g.neovide_floating_blur_amount_y = 10.0
---
---         vim.o.guicursor =
---         "n-v-c:block,i-ci-ve:ver25,r-cr:hor20,o:hor50,a:blinkwait100-blinkoff700-blinkon700-Cursor/lCursor,sm:block-blinkwait0-blinkoff300-blinkon300"
---         vim.g.neovide_cursor_animation_length = 0.03
---         vim.g.neovide_cursor_smooth_blink = false
---         vim.g.neovide_cursor_vfx_mode = "pixiedust"
---     end
--- end)
-
 later(function() require("mini.align").setup() end)
 
 later(function() require("mini.bracketed").setup() end)
 later(function() require("mini.bufremove").setup() end)
 later(function() require("mini.comment").setup() end)
-later(function()
-    require("mini.completion").setup({
-      delay = { completion = 50, info = 50, signature = 25 },
-
-      lsp_completion = {
-        source_func = 'completefunc',
-        auto_setup = true,
-        -- processing priority
-        process_items = function(items, base)
-          table.sort(items, function(a, b)
-            local a_exact = vim.startswith(a.label or "", base)
-            local b_exact = vim.startswith(b.label or "", base)
-            if a_exact and not b_exact then return true end
-            if b_exact and not a_exact then return false end
-            local kind_priority = {
-              [2] = 1,   -- Method
-              [3] = 2,   -- Function
-              [5] = 3,   -- Field/Property
-              [6] = 4,   -- Variable
-              [7] = 5,   -- Class
-              [9] = 6,   -- Module
-              [10] = 7,  -- Property
-              [14] = 8,  -- Keyword
-            }
-            local a_priority = kind_priority[a.kind] or 99
-            local b_priority = kind_priority[b.kind] or 99
-            if a_priority ~= b_priority then
-              return a_priority < b_priority
-            end
-          end)
-          return items
-        end,
-      },
-
-      -- VSCode-like mappings
-      mappings = {
-        force_twostep = '<C-Space>',
-        scroll_down = '<PageDown>',
-        scroll_up = '<PageUp>',
-      },
- })
-end)
 later(function()
     require("mini.cursorword").setup()
     vim.api.nvim_set_hl(0, "MiniCursorword", { underline = true })

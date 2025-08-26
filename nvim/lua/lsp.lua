@@ -12,12 +12,25 @@ add({
 })
 
 add({
+  source = "saghen/blink.cmp",
+  depends = { "rafamadriz/friendly-snippets" },
+  checkout = "v1.6.0",
+})
+
+add({
   source = 'williamboman/mason-lspconfig.nvim',
   depends = { 'williamboman/mason.nvim', 'neovim/nvim-lspconfig' },
 })
 
 add({
   source = 'neovim/nvim-lspconfig',
+  depends = { 'saghen/blink.cmp' }
+})
+
+require('blink.cmp').setup({
+    keymap = {
+      preset = 'super-tab',
+    },
 })
 
 later(function()
@@ -25,7 +38,15 @@ later(function()
   local lspconfig = require('lspconfig')
   local util = require('lspconfig.util')
 
-  local capabilities = vim.lsp.protocol.make_client_capabilities()
+  local capabilities = {
+    textDocument = {
+      foldingRange = {
+        dynamicRegistration = false,
+        lineFoldingOnly = true
+      }
+    }
+  }
+  capabilities = require('blink.cmp').get_lsp_capabilities(capabilities)
 
   require('mason').setup()
   mason_lspconfig.setup({
