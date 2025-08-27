@@ -1,0 +1,13 @@
+# Godot files
+*.tscn
+*.cs.uid
+
+# Or more specifically for Godot project cleanup:
+*.tmp
+*.tscn~
+*.cs.uid
+*.import
+.import/
+.godot/
+*.translation
+*.cfg~

@@ -30,7 +30,14 @@ add({
 require('blink.cmp').setup({
     keymap = {
       preset = 'super-tab',
+      ['<C-i'] = { 'show_signature', 'hide_signature', 'fallback' },
     },
+    signature = { 
+      enabled = true,
+      -- window = {
+      --   { show_documentation = false } 
+      -- }
+    }
 })
 
 later(function()
