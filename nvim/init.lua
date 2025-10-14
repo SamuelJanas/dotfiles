@@ -208,6 +208,5 @@ later(function() require("mini.visits").setup() end)
 -- imports
 require("lsp")
 require("other_plugins")
-require("highlights")
 require("keybinds")
 
