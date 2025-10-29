@@ -5,10 +5,10 @@ keymap("n", "<C-d>", "<C-d>zz")
 keymap("n", "<C-u>", "<C-u>zz")
 -- same can be done with {, }
 --
-keymap("n", "<leader>ff", function() require('mini.pick').builtin.files() end,
-{ desc = 'Find File' })
-keymap("n", "<leader>fr", function() require('mini.pick').builtin.resume() end,
-{ desc = 'Find File' })
+-- keymap("n", "<leader>ff", function() require('mini.pick').builtin.files() end,
+-- { desc = 'Find File' })
+-- keymap("n", "<leader>fr", function() require('mini.pick').builtin.resume() end,
+-- { desc = 'Find File' })
 
 
 keymap("n", "<S-l>", "<cmd>bnext<cr>", { desc = 'Next Buffer' })
@@ -41,10 +41,10 @@ keymap("n", "<leader>e", function()
         end
     end
 end, { desc = "Toggle MiniFiles" })
-keymap("n", "<leader>fg", function() require('mini.pick').builtin.grep_live() end,
-{ desc = 'Find String' })
-keymap("n", "<leader>fh", function() require('mini.pick').builtin.help() end,
-{ desc = 'Find Help' })
+-- keymap("n", "<leader>fg", function() require('mini.pick').builtin.grep_live() end,
+-- { desc = 'Find String' })
+-- keymap("n", "<leader>fh", function() require('mini.pick').builtin.help() end,
+-- { desc = 'Find Help' })
 
 -- Better yanking and disable highlight
 keymap("n", "YY", "<cmd>%y<cr>", { desc = 'Yank Buffer' })
@@ -91,7 +91,6 @@ local opts = { silent = true, noremap = true }
 keymap("n", "gd", vim.lsp.buf.definition, opts)
 keymap("n", "gD", vim.lsp.buf.declaration, opts)
 keymap("n", "gi", vim.lsp.buf.implementation, opts)
-keymap("n", "gt", vim.lsp.buf.type_definition, opts)
 keymap("n", "gr", vim.lsp.buf.references, opts)
 
 -- Information (g prefix)
@@ -110,5 +109,34 @@ keymap("n", "<leader>dp", vim.diagnostic.goto_prev, opts)
 keymap("n", "<leader>dn", vim.diagnostic.goto_next, opts)
 keymap("n", "<leader>dl", vim.diagnostic.setloclist, opts)
 
+-- Telescope lsp 
+keymap("n", "<leader>gd", function()
+  pcall(function() vim.cmd("Telescope lsp_definitions") end)
+end, opts)
+
+keymap("n", "<leader>gD", function()
+  pcall(function() vim.cmd("Telescope lsp_declarations") end)
+end, opts)
+
+keymap("n", "<leader>gi", function()
+  pcall(function() vim.cmd("Telescope lsp_implementations") end)
+end, opts)
+
+keymap("n", "<leader>gt", function()
+  pcall(function() vim.cmd("Telescope lsp_type_definitions") end)
+end, opts)
+
+keymap("n", "<leader>gr", function()
+  pcall(function() vim.cmd("Telescope lsp_references") end)
+end, opts)
+
 keymap('i', '<PageUp>', '<Nop>', { silent = true })
 keymap('i', '<PageDown>', '<Nop>', { silent = true })
+
+-- Telescope
+--
+local builtin = require('telescope.builtin')
+
+-- Telescope
+keymap('n', '<Leader>ff', builtin.find_files, { desc = 'Telescope find files' })
+keymap('n', '<Leader>fg', builtin.live_grep, { desc = 'Telescope live grep' })

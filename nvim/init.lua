@@ -179,20 +179,20 @@ later(function()
             col = math.floor(0.5 * (vim.o.columns - width)),
         }
     end
-    require("mini.pick").setup({
-        mappings = {
-            choose_in_vsplit = "<C-CR>",
-            move_down = '<C-j>',
-            move_up = '<C-k>',
-        },
-        options = {
-            use_cache = true,
-        },
-        window = {
-            config = win_config,
-        },
-    })
-    vim.ui.select = MiniPick.ui_select
+    -- require("mini.pick").setup({
+    --     mappings = {
+    --         choose_in_vsplit = "<C-CR>",
+    --         move_down = '<C-j>',
+    --         move_up = '<C-k>',
+    --     },
+    --     options = {
+    --         use_cache = true,
+    --     },
+    --     window = {
+    --         config = win_config,
+    --     },
+    -- })
+    -- vim.ui.select = MiniPick.ui_select
 end)
 
 -- Does what you see with gS :-)
@@ -202,7 +202,6 @@ later(function() require(
 
 later(function() require("mini.surround").setup() end)
 later(function() require("mini.tabline").setup() end)
--- later(function() require("mini.trailspace").setup() end)
 later(function() require("mini.visits").setup() end)
 
 -- imports
