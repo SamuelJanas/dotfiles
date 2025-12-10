@@ -5,8 +5,7 @@ add({
   depends = { 'nvim-lua/plenary.nvim' },
   hooks = {
     post_checkout = function()
-      require('mason').setup()
-    end,
+      require('mason').setup() end,
   },
 })
 add({
@@ -55,7 +54,6 @@ later(function()
 end)
 
 later(function()
-  local mason_lspconfig = require('mason-lspconfig')
   local lspconfig = require('lspconfig')
   local capabilities = {
     textDocument = {
@@ -67,10 +65,7 @@ later(function()
   }
   capabilities = require('blink.cmp').get_lsp_capabilities(capabilities)
   require('mason').setup()
-  mason_lspconfig.setup({
-    ensure_installed = { "lua_ls", "pyright", "omnisharp" },
-    automatic_installation = true,
-  })
+  --
   -- Lua and Python servers
   lspconfig.lua_ls.setup{ capabilities = capabilities }
   lspconfig.pyright.setup{
@@ -81,7 +76,7 @@ later(function()
           autoSearchPaths = true,
           diagnosticMode = "openFilesOnly",
           useLibraryCodeForTypes = true,
-          typeCheckingMode = "off",
+          typeCheckingMode = "basic",
         },
       },
     },
