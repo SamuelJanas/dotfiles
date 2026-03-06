@@ -1,10 +1,5 @@
 local add, later = MiniDeps.add, MiniDeps.later
 
--- Flash nvim for s mode
-add({
-    source="folke/flash.nvim",
-})
-later(function() require('flash').setup() end)
 
 -- smart-splits for working with tmux
 add({
@@ -20,7 +15,7 @@ add({
 later(
   function() require('telescope').setup{
     defaults = {
-      file_ignore_patterns = { ".git", "node_modules", ".venv" }
+      file_ignore_patterns = { ".git", "node_modules", ".venv", "requirements.txt", ".lock" }
     },
   }
   end

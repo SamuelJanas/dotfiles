@@ -5,13 +5,14 @@ add({
   depends = { 'nvim-lua/plenary.nvim' },
   hooks = {
     post_checkout = function()
-      require('mason').setup() end,
+      require('mason').setup()
+    end,
   },
 })
 add({
   source = "saghen/blink.cmp",
   depends = { "rafamadriz/friendly-snippets" },
-  checkout = "v1.6.0",
+  checkout = "v1.9.1",
 })
 add({
   source = 'williamboman/mason-lspconfig.nvim',
@@ -28,9 +29,6 @@ require('blink.cmp').setup({
     },
     signature = { 
       enabled = true,
-      -- window = {
-      --   { show_documentation = false } 
-      -- }
     }
 })
 
@@ -44,8 +42,8 @@ add({
 })
 
 later(function()
-  require('nvim-treesitter.configs').setup({
-    ensure_installed = { "python", "lua", "c_sharp" },
+  require('nvim-treesitter').setup({
+    ensure_installed = { "python", "lua" },
     highlight = {
       enable = true,
       additional_vim_regex_highlighting = false,
@@ -65,21 +63,31 @@ later(function()
   }
   capabilities = require('blink.cmp').get_lsp_capabilities(capabilities)
   require('mason').setup()
-  --
-  -- Lua and Python servers
-  lspconfig.lua_ls.setup{ capabilities = capabilities }
-  lspconfig.pyright.setup{
-    capabilities = capabilities,
-    settings = {
-      python = {
-        analysis = {
-          autoSearchPaths = true,
-          diagnosticMode = "openFilesOnly",
-          useLibraryCodeForTypes = true,
-          typeCheckingMode = "basic",
-        },
+  require('mason-lspconfig').setup({
+      ensure_installed = {"lua_ls", "pyright", "omnisharp" },
+      automatic_installation=true,
+      handlers = {
+          function(server_name)
+              require("lspconfig").pyright.setup({
+                  capabilities = capabilities,
+                  settings = {
+                      pyright = {
+                          analysis = {
+                              autoSearchPaths = true,
+                              diagnosticMode = "openFilesOnly",
+                              useLibraryCodeForTypes = true,
+                              typeCheckingMode = "basic",
+                              diagnosticSeverityOverrides = {
+                                  reportAttributeAccessIssue = "none",
+                                  reportAssignmentType = "none",
+                              }
+                          }
+                      }
+                  }
+              })
+          end,
       },
-    },
-  }
+
+  })
 end)
 
