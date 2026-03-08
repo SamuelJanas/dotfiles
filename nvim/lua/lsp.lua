@@ -42,7 +42,7 @@ add({
 })
 
 later(function()
-  require('nvim-treesitter').setup({
+  require('nvim-treesitter.config').setup({
     ensure_installed = { "python", "lua" },
     highlight = {
       enable = true,
