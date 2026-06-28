@@ -96,7 +96,8 @@ install_apt_packages() {
     "${sudo_cmd[@]}" apt-get update
     "${sudo_cmd[@]}" apt-get install -y \
         bison build-essential ca-certificates curl fontconfig fzf git \
-        libevent-dev libncurses-dev pkg-config ripgrep unzip vim
+        libevent-dev libncurses-dev pkg-config ripgrep unzip vim zsh \
+        zsh-autosuggestions zsh-syntax-highlighting
 }
 
 install_nvim_linux() {
@@ -175,7 +176,8 @@ install_brew_packages() {
         die "Homebrew is required. Install it from https://brew.sh and rerun this script."
 
     brew update
-    brew install curl fzf git neovim ripgrep tmux unzip uv vim
+    brew install curl fzf git neovim ripgrep tmux unzip uv vim \
+        zsh-autosuggestions zsh-syntax-highlighting
     brew install --cask font-jetbrains-mono-nerd-font
 }
 
@@ -252,3 +254,4 @@ success "Dependency installation complete"
 if [[ ":$PATH:" != *":$HOME/.local/bin:"* && "$OS" == "Linux" ]]; then
     warn "Add $HOME/.local/bin to PATH before using nvim or uv."
 fi
+info 'To make Zsh your login shell, run: chsh -s "$(command -v zsh)"'
