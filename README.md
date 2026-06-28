@@ -12,10 +12,10 @@ Install dependencies, link the dotfiles, and install TPM:
 ./setup.sh
 ```
 
-On Linux, stable command-line tools and build dependencies come from apt.
+On Linux, stable command-line tools come from apt.
 Neovim 0.11.7 and JetBrains Mono Nerd Font come from their official GitHub
-releases, while uv uses its official installer. tmux 3.7 is built from its
-official release tarball with sixel support and installed under `/usr/local`.
+releases, while uv uses its official installer. The prebuilt tmux 3.6b Linux
+x86_64 binary is installed under `~/.local/bin`.
 
 On macOS, dependencies and the Nerd Font are installed with Homebrew.
 

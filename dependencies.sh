@@ -9,7 +9,7 @@ RED='\033[0;31m'
 NC='\033[0m'
 
 NVIM_VERSION="0.11.7"
-TMUX_VERSION="3.7"
+TMUX_VERSION="3.6b"
 NERD_FONT_VERSION="3.4.0"
 INSTALL_NODE=false
 
@@ -95,8 +95,7 @@ install_apt_packages() {
 
     "${sudo_cmd[@]}" apt-get update
     "${sudo_cmd[@]}" apt-get install -y \
-        bison build-essential ca-certificates curl fontconfig fzf git \
-        libevent-dev libncurses-dev pkg-config ripgrep unzip vim zsh \
+        ca-certificates curl fontconfig fzf git ripgrep unzip vim zsh \
         zsh-autosuggestions zsh-syntax-highlighting
 }
 
@@ -143,32 +142,21 @@ install_font_linux() {
 }
 
 install_tmux_linux() {
-    local jobs
     local tmp
 
-    jobs="$(getconf _NPROCESSORS_ONLN 2>/dev/null || printf '1')"
+    [[ "$(uname -m)" == "x86_64" || "$(uname -m)" == "amd64" ]] ||
+        die "The tmux $TMUX_VERSION prebuilt binary requires Linux x86_64."
+
     tmp="$(mktemp -d)"
     curl -fsSL \
-        "https://github.com/tmux/tmux/releases/download/${TMUX_VERSION}/tmux-${TMUX_VERSION}.tar.gz" \
-        -o "$tmp/tmux.tar.gz"
-    tar -xzf "$tmp/tmux.tar.gz" -C "$tmp"
+        "https://github.com/tmux/tmux-builds/releases/download/v${TMUX_VERSION}/tmux-${TMUX_VERSION}-linux-x86_64.tar.gz" \
+        -o "$tmp/tmux-${TMUX_VERSION}.tar.gz"
+    tar -xzf "$tmp/tmux-${TMUX_VERSION}.tar.gz" -C "$tmp"
 
-    if ! (
-        cd "$tmp/tmux-$TMUX_VERSION"
-        ./configure --enable-sixel
-        make -j"$jobs"
-        if ((EUID == 0)); then
-            make install
-        else
-            sudo make install
-        fi
-    ); then
-        rm -rf "$tmp"
-        die "Failed to build tmux $TMUX_VERSION"
-    fi
-
+    mkdir -p "$HOME/.local/bin"
+    mv -f "$tmp/tmux" "$HOME/.local/bin/tmux"
     rm -rf "$tmp"
-    success "$(/usr/local/bin/tmux -V) installed with sixel support"
+    success "$("$HOME/.local/bin/tmux" -V) installed in $HOME/.local/bin"
 }
 
 install_brew_packages() {
@@ -252,6 +240,6 @@ fi
 
 success "Dependency installation complete"
 if [[ ":$PATH:" != *":$HOME/.local/bin:"* && "$OS" == "Linux" ]]; then
-    warn "Add $HOME/.local/bin to PATH before using nvim or uv."
+    warn "Add $HOME/.local/bin to PATH before using nvim, tmux, or uv."
 fi
 info 'To make Zsh your login shell, run: chsh -s "$(command -v zsh)"'
