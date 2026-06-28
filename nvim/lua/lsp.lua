@@ -11,7 +11,7 @@ return {
     opts = {
       keymap = {
         preset = 'super-tab',
-        ['<C-i>'] = { 'show_signature', 'hide_signature', 'fallback' },
+        -- ['<C-i>'] = { 'show_signature', 'hide_signature', 'fallback' },
       },
       signature = { enabled = true },
     },
