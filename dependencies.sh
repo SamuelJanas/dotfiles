@@ -164,7 +164,7 @@ install_brew_packages() {
         die "Homebrew is required. Install it from https://brew.sh and rerun this script."
 
     brew update
-    brew install curl fzf git neovim ripgrep tmux unzip uv vim \
+    brew install curl fzf git neovim ripgrep tmux tree-sitter-cli unzip uv vim \
         zsh-autosuggestions zsh-syntax-highlighting
     brew install --cask font-jetbrains-mono-nerd-font
 }

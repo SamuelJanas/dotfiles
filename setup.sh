@@ -46,12 +46,6 @@ if [ ! -d "$ZSH_CUSTOM_DIR/plugins/zsh-autosuggestions" ]; then
         "$ZSH_CUSTOM_DIR/plugins/zsh-autosuggestions"
 fi
 
-if [ ! -d "$ZSH_CUSTOM_DIR/plugins/zsh-autocomplete" ]; then
-    echo -e "${BLUE}Installing zsh-autocomplete...${NC}"
-    git clone --depth 1 -- https://github.com/marlonrichert/zsh-autocomplete.git \
-        "$ZSH_CUSTOM_DIR/plugins/zsh-autocomplete"
-fi
-
 create_symlink "$DOTFILES_DIR/.tmux.conf" "$HOME/.tmux.conf"
 create_symlink "$DOTFILES_DIR/.zshrc" "$HOME/.zshrc"
 create_symlink "$DOTFILES_DIR/$NVIM_SRC" "$HOME/.config/nvim"

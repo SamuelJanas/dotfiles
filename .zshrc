@@ -5,7 +5,6 @@ plugins=(
     fzf
     zsh-autosuggestions
     tmux
-    zsh-autocomplete
 )
 
 bindkey "^[[1;3D" backward-word
@@ -13,7 +12,6 @@ bindkey "^[[1;3C" forward-word
 
 source "$ZSH/oh-my-zsh.sh"
 
-. "$HOME/.local/bin/env"
 export PATH="$HOME/.local/share/fnm:$PATH"
 export EDITOR="${commands[nvim]:-vim}"
 export VISUAL="$EDITOR"
