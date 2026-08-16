@@ -2,7 +2,7 @@ export ZSH="$HOME/.oh-my-zsh"
 ZSH_THEME="muse"
 plugins=(
     git
-    fzf
+    fzf # M-c - directory fzf change, C-t - file search, C-r history back search
     zsh-autosuggestions
     tmux
 )
@@ -13,6 +13,7 @@ bindkey "^[[1;3C" forward-word
 source "$ZSH/oh-my-zsh.sh"
 
 export PATH="$HOME/.local/share/fnm:$PATH"
+export PATH="$HOME/.local/bin:$PATH"
 export EDITOR="${commands[nvim]:-vim}"
 export VISUAL="$EDITOR"
 
