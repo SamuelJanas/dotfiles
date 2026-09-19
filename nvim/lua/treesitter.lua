@@ -12,11 +12,6 @@ return {
       -- custom handling of parsers
       ensure_installed = {
         "diff",
-        "go",
-        "gomod",
-        "gowork",
-        "gosum",
-        "html",
         "javascript",
         "json",
         "lua",
@@ -26,6 +21,7 @@ return {
         "toml",
         "tsx",
         "yaml",
+        "rust",
       },
     },
     config = function(_, opts)
